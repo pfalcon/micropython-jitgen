@@ -253,3 +253,9 @@ class Codegen(BaseCodegen):
     def epilog(self):
         self.pop(EBP)
         self.ret()
+
+    def link_labels(self):
+        for l in self.labels:
+            laddr = l[0]
+            for ref in l[1:]:
+                self.b[ref] = laddr - ref - 1
