@@ -70,6 +70,7 @@ XOR_IMM = 6
 CMP_IMM = 7
 MOV_RM_R_32 = 0x89
 MOV_R_RM_32 = 0x8b
+TEST_EAX_IMM = 0xa9
 
 EXT = 0xff
 EXT_CALL_RM = 2
@@ -242,6 +243,16 @@ class Codegen(BaseCodegen):
             self.arith_r32_imm8(OR_IMM, arg1, arg2)
         else:
             self.arith_rr32(OR, arg1, arg2)
+
+    def test(self, arg1, arg2):
+        if isinstance(arg2, int):
+            if arg1.id == EAX.id:
+                self.emit(TEST_EAX_IMM)
+                self.emit32(arg2)
+            else:
+                raise NotImplementedError
+        else:
+            raise NotImplementedError
 
     def pop_args(self, num_args):
         self.sub(ESP, num_args * 4)
