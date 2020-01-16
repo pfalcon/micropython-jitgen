@@ -3,7 +3,7 @@
 # This module is part of the Pycopy https://github.com/pfalcon/pycopy
 # project.
 #
-# Copyright (c) 2018-2019 Paul Sokolovsky
+# Copyright (c) 2018-2020 Paul Sokolovsky
 #
 # The MIT License
 #
