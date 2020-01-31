@@ -130,7 +130,9 @@ class Codegen(BaseCodegen):
 
     def mov_imm(self, r, v):
         self.emit(MOV_R_IMM + r)
+        i = self.i
         self.emit32(v)
+        return i
 
     def mov_rr32(self, dest_reg, src_reg):
         self.emit(MOV_R_RM_32)
@@ -143,6 +145,10 @@ class Codegen(BaseCodegen):
             self.mov_imm(dst.id, src)
         else:
             raise NotImplementedError
+
+    def mov_mut(self, dst, val):
+        assert isinstance(val, int)
+        return self.mov_imm(dst.id, val)
 
     def load(self, dest_reg, base_reg, offset):
         self.emit(MOV_R_RM_32)
