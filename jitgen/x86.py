@@ -271,6 +271,14 @@ class Codegen(BaseCodegen):
         self.pop(EBP)
         self.ret()
 
+    def patch_imm32(self, off, v):
+        "Patch 32-bit immediate value at offset, as returned by mov_mut()."
+        v &= 0xffffffff
+        for i in range(4):
+            self.b[off] = v & 0xff
+            off += 1
+            v >>= 8
+
     def link_labels(self):
         for l in self.labels:
             laddr = l[0]
