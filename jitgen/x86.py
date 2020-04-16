@@ -111,6 +111,7 @@ ESP = Reg32(4)
 EBP = Reg32(5)
 ESI = Reg32(6)
 EDI = Reg32(7)
+EIP = Reg32(-1)
 
 
 py = ffi.open(None)
@@ -140,7 +141,11 @@ class Codegen(BaseCodegen):
 
     def mov(self, dst, src):
         if isinstance(src, Reg32):
-            self.mov_rr32(dst.id, src.id)
+            if src.id == EIP.id:
+                self.call_rel(0)
+                self.pop(dst)
+            else:
+                self.mov_rr32(dst.id, src.id)
         elif isinstance(src, int):
             self.mov_imm(dst.id, src)
         else:
