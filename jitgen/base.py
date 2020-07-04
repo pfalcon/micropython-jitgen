@@ -30,10 +30,10 @@ import uctypes
 
 class BaseCodegen:
 
-    def __init__(self, buf):
+    def __init__(self, buf, offset=0):
         self.b = buf
         self._addr = uctypes.addressof(buf)
-        self.i = 0
+        self.i = offset
         self.labels = []
 
     def get_label(self):
