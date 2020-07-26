@@ -197,11 +197,13 @@ class Codegen(BaseCodegen):
         self.ref_label(label)
         self.emit(0)
 
-    def call_imm(self, v):
+    def call_rel(self, v):
         self.emit(CALL)
-        na = self._addr + self.i + 4
-        #print(na, v, v - na)
-        self.emit32(v - na)
+        self.emit32(v)
+
+    def call_imm(self, v):
+        na = self._addr + self.i + 5
+        self.call_rel(v - na)
 
     def call_sym(self, sym):
         p = py.addr(sym)
