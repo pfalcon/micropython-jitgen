@@ -257,6 +257,12 @@ class Codegen(BaseCodegen):
         else:
             self.arith_rr32(OR, arg1, arg2)
 
+    def xor(self, arg1, arg2):
+        if isinstance(arg2, int):
+            self.arith_r32_imm8(XOR_IMM, arg1, arg2)
+        else:
+            self.arith_rr32(XOR, arg1, arg2)
+
     def test(self, arg1, arg2):
         if isinstance(arg2, int):
             if arg1.id == EAX.id:
