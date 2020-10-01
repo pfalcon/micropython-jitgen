@@ -155,7 +155,7 @@ class Codegen(BaseCodegen):
         assert isinstance(val, int)
         return self.mov_imm(dst.id, val)
 
-    def load(self, dest_reg, base_reg, offset):
+    def load(self, dest_reg, base_reg, offset=0):
         self.emit(MOV_R_RM_32)
         self.emit(self.modrm(MOD_IND8, dest_reg.id, base_reg.id))
         self.emit(offset & 0xff)
