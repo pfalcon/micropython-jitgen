@@ -160,6 +160,11 @@ class Codegen(BaseCodegen):
         self.emit(self.modrm(MOD_IND8, dest_reg.id, base_reg.id))
         self.emit(offset & 0xff)
 
+    def store(self, src_reg, base_reg, offset=0):
+        self.emit(MOV_RM_R_32)
+        self.emit(self.modrm(MOD_IND8, src_reg.id, base_reg.id))
+        self.emit(offset & 0xff)
+
     def ret(self):
         self.emit(RET)
 
