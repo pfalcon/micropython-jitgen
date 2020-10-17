@@ -68,7 +68,9 @@ AND_IMM = 4
 SUB_IMM = 5
 XOR_IMM = 6
 CMP_IMM = 7
+MOV_RM_R_8 = 0x88
 MOV_RM_R_32 = 0x89
+MOV_R_RM_8 = 0x8a
 MOV_R_RM_32 = 0x8b
 TEST_EAX_IMM = 0xa9
 
@@ -155,13 +157,13 @@ class Codegen(BaseCodegen):
         assert isinstance(val, int)
         return self.mov_imm(dst.id, val)
 
-    def load(self, dest_reg, base_reg, offset=0):
-        self.emit(MOV_R_RM_32)
+    def load(self, dest_reg, base_reg, offset=0, width=32):
+        self.emit(MOV_R_RM_8 if width == 8 else MOV_R_RM_32)
         self.emit(self.modrm(MOD_IND8, dest_reg.id, base_reg.id))
         self.emit(offset & 0xff)
 
-    def store(self, src_reg, base_reg, offset=0):
-        self.emit(MOV_RM_R_32)
+    def store(self, src_reg, base_reg, offset=0, width=32):
+        self.emit(MOV_RM_R_8 if width == 8 else MOV_RM_R_32)
         self.emit(self.modrm(MOD_IND8, src_reg.id, base_reg.id))
         self.emit(offset & 0xff)
 
