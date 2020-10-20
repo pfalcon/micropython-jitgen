@@ -131,6 +131,10 @@ class Codegen(BaseCodegen):
     def modrm(self, mod, r_op, r_m):
         return (mod << 6) | (r_op << 3) | r_m
 
+    def opsize_pre(self, width):
+        if width == 16:
+            self.emit(PRE_OPSIZE)
+
     def mov_imm(self, r, v):
         self.emit(MOV_R_IMM + r)
         i = self.i
@@ -158,11 +162,13 @@ class Codegen(BaseCodegen):
         return self.mov_imm(dst.id, val)
 
     def load(self, dest_reg, base_reg, offset=0, width=32):
+        self.opsize_pre(width)
         self.emit(MOV_R_RM_8 if width == 8 else MOV_R_RM_32)
         self.emit(self.modrm(MOD_IND8, dest_reg.id, base_reg.id))
         self.emit(offset & 0xff)
 
     def store(self, src_reg, base_reg, offset=0, width=32):
+        self.opsize_pre(width)
         self.emit(MOV_RM_R_8 if width == 8 else MOV_RM_R_32)
         self.emit(self.modrm(MOD_IND8, src_reg.id, base_reg.id))
         self.emit(offset & 0xff)
