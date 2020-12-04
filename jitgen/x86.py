@@ -167,6 +167,19 @@ class Codegen(BaseCodegen):
         self.emit(self.modrm(MOD_IND8, dest_reg.id, base_reg.id))
         self.emit(offset & 0xff)
 
+    def _load_ext(self, opcode, dest_reg, base_reg, offset=0, width=32):
+        assert width in (8, 16)
+        self.emit(0x0f)
+        self.emit(opcode if width == 8 else opcode + 1)
+        self.emit(self.modrm(MOD_IND8, dest_reg.id, base_reg.id))
+        self.emit(offset & 0xff)
+
+    def load_sext(self, dest_reg, base_reg, offset=0, width=32):
+        self._load_ext(0xbe, dest_reg, base_reg, offset, width)
+
+    def load_zext(self, dest_reg, base_reg, offset=0, width=32):
+        self._load_ext(0xb6, dest_reg, base_reg, offset, width)
+
     def store(self, src_reg, base_reg, offset=0, width=32):
         self.opsize_pre(width)
         self.emit(MOV_RM_R_8 if width == 8 else MOV_RM_R_32)
