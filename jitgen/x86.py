@@ -168,7 +168,8 @@ class Codegen(BaseCodegen):
         self.emit(offset & 0xff)
 
     def _load_ext(self, opcode, dest_reg, base_reg, offset=0, width=32):
-        assert width in (8, 16)
+        if width == 32:
+            return self.load(dest_reg, base_reg, offset, width)
         self.emit(0x0f)
         self.emit(opcode if width == 8 else opcode + 1)
         self.emit(self.modrm(MOD_IND8, dest_reg.id, base_reg.id))
